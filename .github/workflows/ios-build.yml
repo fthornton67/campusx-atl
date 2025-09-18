@@ -1,0 +1,59 @@
+name: iOS Build (Flutter, unsigned)
+
+on:
+  push:
+    branches:
+      - campusx_atl
+  workflow_dispatch:
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter Doctor
+        run: flutter doctor -v
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (unsigned)
+        env:
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY || '' }}
+          STRIPE_MERCHANT_IDENTIFIER: merchant.com.campusx.atl
+          STRIPE_URL_SCHEME: campusxatl
+        run: |
+          flutter build ios --no-codesign \
+            --dart-define=STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY} \
+            --dart-define=STRIPE_MERCHANT_IDENTIFIER=${STRIPE_MERCHANT_IDENTIFIER} \
+            --dart-define=STRIPE_URL_SCHEME=${STRIPE_URL_SCHEME}
+
+      - name: Archive .app bundle
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Runner.app
+          path: build/ios/iphoneos/Runner.app
+          if-no-files-found: error
+
+      - name: Upload DerivedData (for debugging)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DerivedData
+          path: ios/DerivedData
+          if-no-files-found: ignore
+
