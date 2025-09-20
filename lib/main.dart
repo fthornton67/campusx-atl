@@ -4,17 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:campusx_atl/firebase_options.dart';
+// Firebase imports removed - handled automatically by FlutterFire plugins
 import 'package:campusx_atl/app/app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Firebase is initialized automatically by FlutterFire plugins
+  // No manual initialization needed
 
   // Add error handling for unhandled exceptions
   FlutterError.onError = (FlutterErrorDetails details) {
