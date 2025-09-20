@@ -20,7 +20,7 @@ This guide will help you set up Firebase for your CampusXATL Flutter app.
 ## Step 2: Add Android App
 
 1. In your Firebase project, click "Add app" and select Android
-2. Enter package name: `com.example.campusx_atl`
+2. Enter package name: `com.campusx_atl`
 3. Enter app nickname: `CampusXATL Android`
 4. Enter SHA-1 fingerprint (optional for now):
    ```bash
@@ -33,7 +33,7 @@ This guide will help you set up Firebase for your CampusXATL Flutter app.
 ## Step 3: Add iOS App
 
 1. In your Firebase project, click "Add app" and select iOS
-2. Enter bundle ID: `com.example.campusx_atl`
+2. Enter bundle ID: `com.campusx_atl`
 3. Enter app nickname: `CampusXATL iOS`
 4. Enter App Store ID (optional)
 5. Click "Register app"

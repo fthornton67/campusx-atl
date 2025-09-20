@@ -88,4 +88,4 @@
 }
 
 # Keep all classes in the models package
--keep class com.example.campusx_atl.models.** { *; }
+-keep class com.campusx_atl.models.** { *; }

@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: 'your-messaging-sender-id',
     projectId: 'campusx-atl',
     storageBucket: 'campusx-atl.appspot.com',
-    iosBundleId: 'com.example.campusx_atl',
+    iosBundleId: 'com.campusx_atl',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: 'your-messaging-sender-id',
     projectId: 'campusx-atl',
     storageBucket: 'campusx-atl.appspot.com',
-    iosBundleId: 'com.example.campusx_atl',
+    iosBundleId: 'com.campusx_atl',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
