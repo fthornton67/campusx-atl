@@ -7,8 +7,11 @@ class MockAuthService {
   firebase_auth.User? _currentUser;
   
   MockAuthService() {
-    // Emit initial state (null = not authenticated)
-    _authStateController.add(null);
+    // Emit initial state (null = not authenticated) after a small delay
+    // to simulate async behavior
+    Future.microtask(() {
+      _authStateController.add(null);
+    });
   }
   
   firebase_auth.User? get currentUser => _currentUser;

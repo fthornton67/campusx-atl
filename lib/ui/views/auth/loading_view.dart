@@ -15,10 +15,10 @@ class _LoadingViewState extends ConsumerState<LoadingView> {
   void initState() {
     super.initState();
     // Add a timeout to prevent infinite loading
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
-        // If still loading after 5 seconds, redirect to auth
-        context.go('/auth');
+        // If still loading after 500ms, redirect to home (allow anonymous access)
+        context.go('/');
       }
     });
   }
@@ -32,11 +32,8 @@ class _LoadingViewState extends ConsumerState<LoadingView> {
       next.when(
         data: (user) {
           if (mounted) {
-            if (user != null) {
-              context.go('/');
-            } else {
-              context.go('/auth');
-            }
+            // Always redirect to home, regardless of authentication status
+            context.go('/');
           }
         },
         loading: () {
@@ -44,7 +41,8 @@ class _LoadingViewState extends ConsumerState<LoadingView> {
         },
         error: (error, stack) {
           if (mounted) {
-            context.go('/auth');
+            // On error, still redirect to home (allow anonymous access)
+            context.go('/');
           }
         },
       );

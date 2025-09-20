@@ -17,6 +17,11 @@ final authStateProvider = StreamProvider<firebase_auth.User?>((ref) {
         debugPrint('AuthStateProvider: Auth state changed - user: ${user?.uid ?? 'null'}');
       }
       return user;
+    }).handleError((error) {
+      if (kDebugMode) {
+        debugPrint('AuthStateProvider: Stream error - $error');
+      }
+      return null;
     });
   } catch (e) {
     if (kDebugMode) {
