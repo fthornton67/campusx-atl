@@ -8,17 +8,22 @@ final authServiceProvider = Provider<MockAuthService>((ref) => MockAuthService()
 
 final authStateProvider = StreamProvider<firebase_auth.User?>((ref) {
   final authService = ref.watch(authServiceProvider);
-  // Start with a null value immediately, then listen to the stream
-  return Stream.value(null).asyncExpand((_) {
-    try {
-      return authService.authStateChanges;
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error in authStateProvider: $e');
-      }
-      return Stream.value(null);
+  try {
+    if (kDebugMode) {
+      debugPrint('AuthStateProvider: Starting to listen to auth state changes');
     }
-  });
+    return authService.authStateChanges.map((user) {
+      if (kDebugMode) {
+        debugPrint('AuthStateProvider: Auth state changed - user: ${user?.uid ?? 'null'}');
+      }
+      return user;
+    });
+  } catch (e) {
+    if (kDebugMode) {
+      debugPrint('Error in authStateProvider: $e');
+    }
+    return Stream.value(null);
+  }
 });
 
 final currentUserProvider = FutureProvider<app_models.User?>((ref) async {

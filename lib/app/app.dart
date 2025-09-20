@@ -12,7 +12,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
   
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/loading',
     redirect: (context, state) {
       return authState.when(
         data: (user) {
@@ -21,17 +21,26 @@ final routerProvider = Provider<GoRouter>((ref) {
           final isDebugRoute = state.uri.path == '/debug';
           final isLoadingRoute = state.uri.path == '/loading';
           
+          // If not authenticated and not on auth/debug page, go to auth
           if (!isAuthenticated && !isAuthRoute && !isDebugRoute) {
             return '/auth';
           }
           
+          // If authenticated and on auth/loading page, go to home
           if (isAuthenticated && (isAuthRoute || isLoadingRoute)) {
             return '/';
           }
           
+          // No redirect needed
           return null;
         },
-        loading: () => '/loading', // Show loading screen
+        loading: () {
+          // If already on loading page, stay there
+          if (state.uri.path == '/loading') {
+            return null;
+          }
+          return '/loading';
+        },
         error: (_, __) => '/auth', // Show auth screen on error
       );
     },
