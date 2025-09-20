@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../models/user.dart' as app_models;
+import '../../../services/firebase_test_service.dart';
 
 class DebugView extends ConsumerWidget {
   const DebugView({super.key});
@@ -47,6 +48,78 @@ class DebugView extends ConsumerWidget {
                       loading: () => 'Loading...',
                       error: (error, _) => 'Error: $error',
                     )}'),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Firebase Status',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final success = await FirebaseTestService.testFirebaseConnection();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(success ? 'Firebase connection successful!' : 'Firebase connection failed!'),
+                              backgroundColor: success ? Colors.green : Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Test Firebase Connection'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final success = await FirebaseTestService.testFirestoreWrite();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(success ? 'Firestore write successful!' : 'Firestore write failed!'),
+                              backgroundColor: success ? Colors.green : Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Test Firestore Write'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final success = await FirebaseTestService.testFirestoreRead();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(success ? 'Firestore read successful!' : 'Firestore read failed!'),
+                              backgroundColor: success ? Colors.green : Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Test Firestore Read'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await FirebaseTestService.cleanupTestData();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Test data cleaned up!')),
+                          );
+                        }
+                      },
+                      child: const Text('Cleanup Test Data'),
+                    ),
                   ],
                 ),
               ),

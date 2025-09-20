@@ -45,8 +45,9 @@ A Flutter-based marketplace app for campus services at Georgia State University,
    ```
 
 3. Configure Firebase:
+   - Follow the detailed setup guide in `FIREBASE_SETUP.md`
    - Add your `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
-   - Update Firebase configuration in `lib/main.dart`
+   - Update Firebase configuration in `lib/firebase_options.dart`
 
 4. Configure Stripe:
    - Add your Stripe publishable key as a compile-time environment variable
@@ -56,6 +57,11 @@ A Flutter-based marketplace app for campus services at Georgia State University,
    ```bash
    flutter run
    ```
+
+6. Test Firebase connection:
+   - Navigate to the Debug view in the app
+   - Use the Firebase test buttons to verify connection
+   - Check console output for any errors
 
 ## Project Structure
 
