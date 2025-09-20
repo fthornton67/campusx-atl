@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../models/user.dart' as app_models;
 
 class SignInView extends ConsumerStatefulWidget {
   const SignInView({super.key});
@@ -57,10 +59,23 @@ class _SignInViewState extends ConsumerState<SignInView> {
                       ? null
                       : () async {
                           setState(() => isLoading = true);
-                          await Future.delayed(const Duration(milliseconds: 400));
-                          if (mounted) {
-                            setState(() => isLoading = false);
-                            if (context.mounted) context.go('/');
+                          try {
+                            final authService = ref.read(authServiceProvider);
+                            await authService.signInWithEmailAndPassword(
+                              emailController.text.trim(),
+                              passwordController.text.trim(),
+                            );
+                            // Navigation will be handled automatically by the router
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Sign in failed: $e')),
+                              );
+                            }
+                          } finally {
+                            if (mounted) {
+                              setState(() => isLoading = false);
+                            }
                           }
                         },
                   child: Text(isLoading ? 'Signing in...' : 'Sign In'),
@@ -70,18 +85,73 @@ class _SignInViewState extends ConsumerState<SignInView> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () async {
-                    // Placeholder for Google sign-in
-                    context.go('/');
-                  },
-                  child: const Text('Continue with Google'),
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          setState(() => isLoading = true);
+                          try {
+                            final authService = ref.read(authServiceProvider);
+                            await authService.signInWithGoogle();
+                            // Navigation will be handled automatically by the router
+                          } catch (e) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Google sign in failed: $e')),
+                              );
+                            }
+                          } finally {
+                            if (mounted) {
+                              setState(() => isLoading = false);
+                            }
+                          }
+                        },
+                  child: Text(isLoading ? 'Signing in...' : 'Continue with Google'),
                 ),
               ),
               const Spacer(),
               TextButton(
                 onPressed: () {},
                 child: const Text("Don't have an account? Sign up"),
-              )
+              ),
+              const SizedBox(height: 16),
+              // Temporary skip button for development
+              TextButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        setState(() => isLoading = true);
+                        try {
+                          final authService = ref.read(authServiceProvider);
+                          await authService.createUserWithEmailAndPassword(
+                            email: 'test@gsu.edu',
+                            password: 'password123',
+                            firstName: 'Test',
+                            lastName: 'User',
+                            userType: app_models.UserType.student,
+                            studentId: '123456789',
+                            major: 'Computer Science',
+                          );
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Account creation failed: $e')),
+                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() => isLoading = false);
+                          }
+                        }
+                      },
+                child: Text(isLoading ? 'Creating...' : 'Create Test Account'),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () {
+                  context.go('/debug');
+                },
+                child: const Text('Debug Info'),
+              ),
             ],
           ),
         ),

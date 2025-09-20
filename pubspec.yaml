@@ -57,6 +57,24 @@ dependencies:
   geolocator: ^10.1.0
   flutter_local_notifications: ^17.2.1
 
+  # Maps and Location
+  google_maps_flutter: ^2.6.0
+  google_polyline_algorithm: ^3.1.0
+
+  # UI Components
+  flutter_rating_bar: ^4.0.1
+  shimmer: ^3.0.0
+  lottie: ^3.1.2
+  flutter_svg: ^2.0.10+1
+
+  # State Management
+  riverpod_annotation: ^2.3.5
+  freezed_annotation: ^2.4.4
+  freezed: ^2.5.7
+
+  # Real-time features
+  socket_io_client: ^2.0.3+1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -73,6 +91,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.11
   json_serializable: ^6.9.3
+  riverpod_generator: ^2.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
